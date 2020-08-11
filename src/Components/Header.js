@@ -48,14 +48,15 @@ const SLink = styled(Link)`
   align-items: center;
   justify-content: center;
 `;
-const SearchButton = styled(Link)`
+const SearchButton = styled.button`
   font-size: 20px;
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #d35400;
+  background-color: #f39c12;
   border-radius: 0 5px 5px 0;
+  border: none;
 `;
 
 export default () => {
@@ -64,10 +65,12 @@ export default () => {
 
   let typingTimer = null;
 
+  // const handleClick = (e) => {};
+
   const handleSearch = ({ target: { value } }) => {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(() => {
-      if (value) {
+      if (value && value !== "") {
         setKeywords(value);
       }
     }, 800);
@@ -95,7 +98,7 @@ export default () => {
           placeholder={"Search Movies or TV shows"}
         />
         <Redirect push to={keywords === "" ? "/" : `/search/${keywords}`} />
-        {/* <SearchButton to="/search">
+        {/* <SearchButton onClick={handleClick}>
           <FontAwesomeIcon icon={faSearch} />
         </SearchButton> */}
       </SearchContainer>

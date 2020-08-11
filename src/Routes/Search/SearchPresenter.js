@@ -41,18 +41,24 @@ const ListContainer = styled.div`
 `;
 
 export default ({ movies, tvs }) => (
-  <Container>
-    {movies.length > 0 ? <Title>Movies Results</Title> : null}
-    <ListContainer>
-      {movies.map((e) => (
-        <Poster key={e.id} data={e} />
-      ))}
-    </ListContainer>
-    {tvs.length > 0 ? <Title>TV Shows Results</Title> : null}
-    <ListContainer>
-      {tvs.map((e) => (
-        <Poster key={e.id} data={e} isTv />
-      ))}
-    </ListContainer>
-  </Container>
+  <>
+    {movies.length > 0 || tvs.length > 0 ? (
+      <Container>
+        {movies.length > 0 ? <Title>Movies Results</Title> : null}
+        <ListContainer>
+          {movies.map((e) => (
+            <Poster key={e.id} data={e} />
+          ))}
+        </ListContainer>
+        {tvs.length > 0 ? <Title>TV Shows Results</Title> : null}
+        <ListContainer>
+          {tvs.map((e) => (
+            <Poster key={e.id} data={e} isTv />
+          ))}
+        </ListContainer>
+      </Container>
+    ) : (
+      <Title>Sorry, No Result</Title>
+    )}
+  </>
 );

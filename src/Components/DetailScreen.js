@@ -116,9 +116,13 @@ const DetailScreen = ({ detail, similer, isTv }) => (
           </Section>
           <Section>
             <Info>
-              {detail.release_date && detail.release_date.substring(0, 7)} /
+              {isTv
+                ? detail.air_date || detail.last_air_date
+                : detail.release_date &&
+                  detail.release_date.substring(0, 7)}{" "}
+              /
             </Info>
-            <Info>{detail.runtime && detail.runtime}min /</Info>
+            {!isTv ? <Info>detail.runtime}min /</Info> : null}
             {detail.genres &&
               detail.genres.map((e, i) => (
                 <Info key={e.id}>
@@ -173,6 +177,18 @@ const DetailScreen = ({ detail, similer, isTv }) => (
               }
             })}
           </VideoSection>
+
+          {isTv && detail.seasons ? (
+            <VideoSection>
+              <SectionTitle>Seasons</SectionTitle>
+              <ListContainer>
+                {detail.seasons.map((e) => (
+                  <Poster key={e.id} data={e} isTv={isTv} season />
+                ))}
+              </ListContainer>
+            </VideoSection>
+          ) : null}
+
           <VideoSection>
             <SectionTitle>Related {isTv ? "TV Shows" : "Movies"}</SectionTitle>
             <ListContainer>

@@ -3,7 +3,9 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const LinkComponent = styled(Link)``;
+const LinkComponent = styled(Link)`
+  pointer-events: ${(props) => (props.season ? "none" : "")};
+`;
 
 const InfoComponent = styled.div`
   position: absolute;
@@ -50,9 +52,11 @@ const Container = styled.div`
   }
 `;
 
-const Poster = ({ data, isTv = false }) => (
+const Poster = ({ data, isTv = false, season = false }) => (
   <Container>
-    <LinkComponent to={isTv ? `/tv/${data.id}` : `/movie/${data.id}`}>
+    <LinkComponent
+      to={season ? "#" : isTv ? `/tv/${data.id}` : `/movie/${data.id}`}
+    >
       <ImageContainer
         bgImage={
           data.poster_path
@@ -62,19 +66,22 @@ const Poster = ({ data, isTv = false }) => (
       >
         <InfoComponent>
           <Title>{isTv ? data.name : data.title}</Title>
+          {season && <Info>{data.air_date}</Info>}
           <Info>
             {data.overview.length > 70
               ? `${data.overview.substring(0, 70)}...`
               : data.overview}
           </Info>
-          <div>
-            <Info>
-              <span role="img" aria-label="">
-                ⭐️
-              </span>{" "}
-              {data.vote_average} / 10
-            </Info>
-          </div>
+          {season ? null : (
+            <div>
+              <Info>
+                <span role="img" aria-label="">
+                  ⭐️
+                </span>{" "}
+                {data.vote_average} / 10
+              </Info>
+            </div>
+          )}
         </InfoComponent>
       </ImageContainer>
     </LinkComponent>
