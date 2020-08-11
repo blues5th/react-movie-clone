@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useLocation, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -61,9 +61,23 @@ const SearchButton = styled(Link)`
 export default () => {
   const { pathname } = useLocation();
   const [keywords, setKeywords] = useState("");
+
+  let typingTimer = null;
+
   const handleSearch = ({ target: { value } }) => {
-    setKeywords(value);
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => {
+      if (value) {
+        setKeywords(value);
+      }
+    }, 800);
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(typingTimer);
+    };
+  }, []);
   return (
     <Header>
       <List>
