@@ -54,7 +54,11 @@ const Poster = ({ data, isTv = false }) => (
   <Container>
     <LinkComponent to={isTv ? `/tv/${data.id}` : `/movie/${data.id}`}>
       <ImageContainer
-        bgImage={`https://image.tmdb.org/t/p/w300/${data.poster_path}`}
+        bgImage={
+          data.poster_path
+            ? `https://image.tmdb.org/t/p/w300/${data.poster_path}`
+            : require("../assets/default.jpg")
+        }
       >
         <InfoComponent>
           <Title>{isTv ? data.name : data.title}</Title>

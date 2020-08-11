@@ -88,88 +88,102 @@ const ListContainer = styled.div`
 `;
 
 const DetailScreen = ({ detail, similer, isTv }) => (
-  <Container>
-    <BGImageContainer
-      bgImage={`https://image.tmdb.org/t/p/original/${detail.backdrop_path}`}
-    ></BGImageContainer>
-    <PosterContainer
-      bgImage={`https://image.tmdb.org/t/p/original/${detail.poster_path}`}
-    />
-    <ContentContainer>
-      <Section>
-        <Title>{isTv ? detail.name : detail.title}</Title>
-        {detail.vote_average ? <VoteStar rate={detail.vote_average} /> : null}
-        <Info>{detail.vote_average} / 10</Info>
-        <Info>({detail.vote_count} Votes)</Info>
-      </Section>
-      <Section>
-        <Info>
-          {detail.release_date && detail.release_date.substring(0, 7)} /
-        </Info>
-        <Info>{detail.runtime && detail.runtime}min /</Info>
-        {detail.genres &&
-          detail.genres.map((e, i) => (
-            <Info key={e.id}>
-              {e.name}
-              {i < detail.genres.length - 1 ? "," : null}
-            </Info>
-          ))}
-      </Section>
-      <Section>
-        {detail.production_companies &&
-          detail.production_companies.map((e, i) => (
-            <Info key={e.id}>
-              {e.name}
-              {i < detail.production_companies.length - 1 ? " /" : null}
-            </Info>
-          ))}
-      </Section>
-      <Section>
-        {detail.production_countries &&
-          detail.production_countries.map((e, i) => (
-            <Info key={i}>
-              {e.name}
-              {i < detail.production_countries.length - 1 ? " /" : null}
-            </Info>
-          ))}
-      </Section>
-      <LinkSection
-        href={`https://www.imdb.com/title/${detail.imdb_id}`}
-        target="_blank"
-      >
-        <Icon src="https://img.icons8.com/color/48/000000/imdb.png" />
-        <FontAwesomeIcon icon={faExternalLinkAlt} />
-      </LinkSection>
-      <Section>{detail.overview}</Section>
-      <VideoSection>
-        <SectionTitle>Trailers</SectionTitle>
-        {detail.videos?.results?.map((e) => {
-          if (e.site.toLowerCase() === "youtube") {
-            return (
-              <LinkSection
-                key={e.key}
-                href={`https://www.youtube.com/watch?v=${e.key}`}
-                target="_blank"
-              >
-                Youtube {e.name}
-                <FontAwesomeIcon
-                  icon={faExternalLinkAlt}
-                  style={{ marginLeft: "5px" }}
-                />
-              </LinkSection>
-            );
+  <>
+    {detail && similer ? (
+      <Container>
+        <BGImageContainer
+          bgImage={
+            detail.backdrop_path
+              ? `https://image.tmdb.org/t/p/original/${detail.backdrop_path}`
+              : require("../assets/default.jpg")
           }
-        })}
-      </VideoSection>
-      <VideoSection>
-        <SectionTitle>Related {isTv ? "TV Shows" : "Movies"}</SectionTitle>
-        <ListContainer>
-          {similer &&
-            similer.map((e) => <Poster key={e.id} data={e} isTv={isTv} />)}
-        </ListContainer>
-      </VideoSection>
-    </ContentContainer>
-  </Container>
+        ></BGImageContainer>
+        <PosterContainer
+          bgImage={
+            detail.poster_path
+              ? `https://image.tmdb.org/t/p/w500/${detail.poster_path}`
+              : require("../assets/default.jpg")
+          }
+        />
+        <ContentContainer>
+          <Section>
+            <Title>{isTv ? detail.name : detail.title}</Title>
+            {detail.vote_average ? (
+              <VoteStar rate={detail.vote_average} />
+            ) : null}
+            <Info>{detail.vote_average} / 10</Info>
+            <Info>({detail.vote_count} Votes)</Info>
+          </Section>
+          <Section>
+            <Info>
+              {detail.release_date && detail.release_date.substring(0, 7)} /
+            </Info>
+            <Info>{detail.runtime && detail.runtime}min /</Info>
+            {detail.genres &&
+              detail.genres.map((e, i) => (
+                <Info key={e.id}>
+                  {e.name}
+                  {i < detail.genres.length - 1 ? "," : null}
+                </Info>
+              ))}
+          </Section>
+          <Section>
+            {detail.production_companies &&
+              detail.production_companies.map((e, i) => (
+                <Info key={e.id}>
+                  {e.name}
+                  {i < detail.production_companies.length - 1 ? " /" : null}
+                </Info>
+              ))}
+          </Section>
+          <Section>
+            {detail.production_countries &&
+              detail.production_countries.map((e, i) => (
+                <Info key={i}>
+                  {e.name}
+                  {i < detail.production_countries.length - 1 ? " /" : null}
+                </Info>
+              ))}
+          </Section>
+          <LinkSection
+            href={`https://www.imdb.com/title/${detail.imdb_id}`}
+            target="_blank"
+          >
+            <Icon src="https://img.icons8.com/color/48/000000/imdb.png" />
+            <FontAwesomeIcon icon={faExternalLinkAlt} />
+          </LinkSection>
+          <Section>{detail.overview}</Section>
+          <VideoSection>
+            <SectionTitle>Trailers</SectionTitle>
+            {detail.videos?.results?.map((e) => {
+              if (e.site.toLowerCase() === "youtube") {
+                return (
+                  <LinkSection
+                    key={e.key}
+                    href={`https://www.youtube.com/watch?v=${e.key}`}
+                    target="_blank"
+                  >
+                    Youtube {e.name}
+                    <FontAwesomeIcon
+                      icon={faExternalLinkAlt}
+                      style={{ marginLeft: "5px" }}
+                    />
+                  </LinkSection>
+                );
+              }
+            })}
+          </VideoSection>
+          <VideoSection>
+            <SectionTitle>Related {isTv ? "TV Shows" : "Movies"}</SectionTitle>
+            <ListContainer>
+              {similer &&
+                similer.map((e) => <Poster key={e.id} data={e} isTv={isTv} />)}
+            </ListContainer>
+          </VideoSection>
+        </ContentContainer>
+      </Container>
+    ) : null}
+  </>
 );
 
 DetailScreen.propTypes = {
