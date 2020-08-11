@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -35,8 +35,10 @@ const SearchField = styled.input`
   height: 100%;
   width: 300px;
   border: none;
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px;
   font-size: 18px;
+  outline: none;
+  padding-left: 5px;
 `;
 
 const SLink = styled(Link)`
@@ -58,6 +60,10 @@ const SearchButton = styled(Link)`
 
 export default () => {
   const { pathname } = useLocation();
+  const [keywords, setKeywords] = useState("");
+  const handleSearch = ({ target: { value } }) => {
+    setKeywords(value);
+  };
   return (
     <Header>
       <List>
@@ -69,10 +75,15 @@ export default () => {
         </Item>
       </List>
       <SearchContainer>
-        <SearchField type="text" />
-        <SearchButton to="/search">
+        <SearchField
+          type="text"
+          onChange={handleSearch}
+          placeholder={"Search Movies or TV shows"}
+        />
+        <Redirect push to={keywords === "" ? "/" : `/search/${keywords}`} />
+        {/* <SearchButton to="/search">
           <FontAwesomeIcon icon={faSearch} />
-        </SearchButton>
+        </SearchButton> */}
       </SearchContainer>
     </Header>
   );

@@ -1,34 +1,91 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Link, Route } from "react-router-dom";
-import Detail from "../Routes/Detail";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const LinkComponent = styled(Link)`
-  transition: transform 0.3s;
-  &:hover {
-    transform: scale(1.5);
-  }
+const LinkComponent = styled(Link)``;
+
+const InfoComponent = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 `;
-const Component = styled.div`
+
+const Title = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+`;
+const Info = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 8px;
+`;
+
+const ImageContainer = styled.div`
   height: 180px;
   background-image: url(${(props) => props.bgImage});
-  background-size: contain;
+  background-size: cover;
   background-position: center center;
+  background-color: black;
 `;
-const Poster = ({ data, isMovie }) => {
-  const [isClicked, setIsClicked] = useState(false);
-  const handleClick = () => {
-    setIsClicked((prev) => !prev);
-  };
-  return (
-    <LinkComponent to={isMovie ? `/movie/${data.id}` : `/tv/${data.id}`}>
-      <Component
-        onClick={handleClick}
-        isClicked={isClicked}
+
+const Container = styled.div`
+  position: relative;
+  transition: transform 0.5s;
+  &:hover {
+    transform: scale(1.5);
+    z-index: 1;
+    ${InfoComponent} {
+      opacity: 1;
+    }
+  }
+`;
+
+const Poster = ({ data, isTv = false }) => (
+  <Container>
+    <LinkComponent to={isTv ? `/tv/${data.id}` : `/movie/${data.id}`}>
+      <ImageContainer
         bgImage={`https://image.tmdb.org/t/p/w300/${data.poster_path}`}
-      />
+      >
+        <InfoComponent>
+          <Title>{isTv ? data.name : data.title}</Title>
+          <Info>
+            {data.overview.length > 70
+              ? `${data.overview.substring(0, 70)}...`
+              : data.overview}
+          </Info>
+          <div>
+            <Info>
+              <span role="img" aria-label="">
+                ⭐️
+              </span>{" "}
+              {data.vote_average} / 10
+            </Info>
+          </div>
+        </InfoComponent>
+      </ImageContainer>
     </LinkComponent>
-  );
+  </Container>
+);
+
+Poster.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    poster_path: PropTypes.string,
+    title: PropTypes.string,
+    name: PropTypes.string,
+    overview: PropTypes.string,
+    vote_average: PropTypes.number,
+  }),
 };
 
 export default Poster;

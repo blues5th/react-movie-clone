@@ -1,12 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DetailPresenter from "./DetailPresenter";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+import { getDetail, getSimiler } from "../../api";
 
 export default () => {
   const { pathname } = useLocation();
+  const params = useParams();
   const history = useHistory();
   const handleGoBack = () => {
     history.goBack();
   };
-  return <DetailPresenter goBack={handleGoBack} />;
+  const isTv = pathname.includes("tv");
+  const [data, setData] = useState({
+    isLoading: true,
+    detail: [],
+    detailError: null,
+    similer: [],
+    similerError: null,
+  });
+  const getDetailData = async () => {
+    const [detail, detailError] = await getDetail(pathname);
+    const [similer, similerError] = await getSimiler(pathname);
+    setData({
+      isLoading: false,
+      detail,
+      detailError,
+      similer,
+      similerError,
+    });
+  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    getDetailData();
+  }, [params]);
+  return <DetailPresenter goBack={handleGoBack} data={data} isTv={isTv} />;
 };

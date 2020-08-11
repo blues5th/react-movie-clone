@@ -18,6 +18,7 @@ export default () => {
     const [upcoming, upcomingError] = await moviesApi.upcoming();
     const [popular, popularError] = await moviesApi.popular();
     setMovies({
+      isLoading: false,
       nowPlaying,
       nowPlayingError,
       upcoming,
@@ -27,6 +28,7 @@ export default () => {
     });
   };
   useEffect(() => {
+    window.scrollTo(0, 0);
     getMovies();
   }, []);
 

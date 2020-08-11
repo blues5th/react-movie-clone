@@ -1,26 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchPresenter from "./SearchPresenter";
 import { moviesApi, tvApi } from "../../api";
+import { useParams } from "react-router-dom";
 
 export default () => {
-  const [keyword, setKeyword] = useState();
+  // const [keyword, setKeywords] = useState("");
+  const { keywords } = useParams();
   const [results, setResults] = useState({
     isLoading: true,
     movies: [],
     tvs: [],
   });
 
-  const handleKeyword = (keyword) => {
-    setKeyword(keyword);
-  };
-
-  const handleSubmit = () => {
-    getResults();
-  };
-
-  const getResults = async () => {
-    const [movies, moviesError] = moviesApi.search(keyword);
-    const [tvs, tvsError] = tvApi.search(keyword);
+  const getResults = async (keywords) => {
+    const [movies, moviesError] = await moviesApi.search(keywords);
+    const [tvs, tvsError] = await tvApi.search(keywords);
     setResults({
       isLoading: false,
       movies,
@@ -28,11 +22,9 @@ export default () => {
     });
   };
 
-  return (
-    <SearchPresenter
-      {...results}
-      handleKeyword={handleKeyword}
-      handleSubmit={handleSubmit}
-    />
-  );
+  useEffect(() => {
+    getResults(keywords);
+  }, [keywords]);
+
+  return <SearchPresenter {...results} />;
 };
