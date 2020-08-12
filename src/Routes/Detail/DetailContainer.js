@@ -33,6 +33,6 @@ export default () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     getDetailData();
-  }, [params]);
+  }, []);
   return <DetailPresenter goBack={handleGoBack} data={data} isTv={isTv} />;
 };
