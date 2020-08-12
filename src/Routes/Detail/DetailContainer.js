@@ -21,8 +21,7 @@ export default () => {
   const getDetailData = async () => {
     const [detail, detailError] = await getDetail(pathname);
     const [similer, similerError] = await getSimiler(pathname);
-    console.log(detail);
-    console.log(similer);
+
     setData({
       isLoading: false,
       detail,
