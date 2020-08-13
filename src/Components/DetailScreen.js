@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import VoteStar from "./VoteStar";
 import Poster from "./Poster";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -55,7 +56,7 @@ const SectionTitle = styled.div`
   font-size: 25px;
 `;
 
-const LinkSection = styled.a`
+const LinkSection = styled(Link)`
   display: flex;
   align-items: center;
   font-size: 15px;
@@ -164,7 +165,7 @@ const DetailScreen = ({ detail, similer, isTv }) => (
                 return (
                   <LinkSection
                     key={e.key}
-                    href={`https://www.youtube.com/watch?v=${e.key}`}
+                    to={`https://www.youtube.com/watch?v=${e.key}`}
                     target="_blank"
                   >
                     Youtube {e.name}
